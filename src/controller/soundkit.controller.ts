@@ -5,6 +5,7 @@ import validationMiddleware from "@/middleware/validation.middleware";
 import validate from '@/utils/validation/soundkit.validation'
 import SoundkitService from '@/service/soundkit.service';
 import authenticated from '@/middleware/authenticated.middleware';
+import roleMiddleware from "@/middleware/role.middleware";
 
 class SoundkitController implements IController {
     public path = '/soundkit';
@@ -27,7 +28,7 @@ class SoundkitController implements IController {
          * Create new Soundkit
         */
 
-        this.router.post(`${this.path}`,validationMiddleware(validate.create),this.create)
+        this.router.post(`${this.path}`,[roleMiddleware,validationMiddleware(validate.create)],this.create)
 
         /**
          * Update soundkit
