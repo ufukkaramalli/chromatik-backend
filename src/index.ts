@@ -8,6 +8,18 @@ import SoundkitController from '@/controller/soundkit.controller';
 
 validateEnv();
 
-const app = new App([new TrackController(), new UserController(), new SoundkitController()], Number(process.env.PORT));
+const app = new App(
+    /**
+     * Register Controllers
+     */
+    [
+        new TrackController(),
+        new UserController(),
+        new SoundkitController()
+    ],
+    /**
+     * Register server port number
+     */
+    Number(process.env.PORT));
 
 app.listen();
