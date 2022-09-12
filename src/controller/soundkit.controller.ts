@@ -13,26 +13,24 @@ class SoundkitController implements IController {
     private SoundkitService = new SoundkitService();
 
     constructor(){
-        this.initialiseRoutes();
-
         /**
-         * Authentication Guard
-         */
-        
-        this.router.use(authenticated)
+        * Authentication Guard
+        */
+        this.router.use(`${this.path}`,[authenticated, roleMiddleware])
+        this.initialiseRoutes();
     }
 
     private initialiseRoutes(): void {
 
         /**
-         * Create new Soundkit
+        * Create new Soundkit
         */
 
-        this.router.post(`${this.path}`,[roleMiddleware,validationMiddleware(validate.create)],this.create)
+        this.router.post(`${this.path}`,[validationMiddleware(validate.create)],this.create)
 
         /**
-         * Update soundkit
-         */
+        * Update soundkit
+        */
     }
 
     private create = async (req:Request,res:Response,next: NextFunction): Promise<Response | void> => {
