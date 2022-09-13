@@ -5,6 +5,7 @@ import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/utils/validation/user.validation';
 import UserService from '@/service/user.service';
 import authenticated from '@/middleware/authenticated.middleware';
+import IUser from '@/interfaces/user.interface';
 
 class UserController implements IController {
     public path = '/user';
@@ -26,16 +27,18 @@ class UserController implements IController {
             validationMiddleware(validate.login),
             this.login
         )
-        this.router.get(`${this.path}`,authenticated,this.getUser)
+
+        this.router.use(`${this.path}`,authenticated)
+        this.router.get(`${this.path}`,this.getUser)
     }
 
     private register = async (
-        req: Request,
+        req: Request<{},{},IUser>,
         res: Response,
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { name, email, password} = req.body
+            const { name, email, password } = req.body
             const token = await this.UserService.register(
                 name,
                 email,
@@ -65,7 +68,7 @@ class UserController implements IController {
         req: Request,
         res: Response,
         next: NextFunction
-    ): Response | void => {
+    ): Response<Omit<IUser,'_id'>> | void => {
         if (!req.user) {
             return next(new HttpException(404, 'No logged in user'));
         }
