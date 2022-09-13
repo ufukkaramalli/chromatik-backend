@@ -1,6 +1,10 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import IUser from '@/interfaces/user.interface';
+//@ts-ignore
+import slug from 'mongoose-slug-generator'
+
+mongoose.plugin(slug)
 
 const UserSchema = new Schema(
     {
@@ -22,6 +26,11 @@ const UserSchema = new Schema(
             type:String,
             default:'producer',
 
+        },
+        slug: {
+            type:String,
+            slug:"name",
+            unique:true
         },
         photoUrl: {
             type:String,
