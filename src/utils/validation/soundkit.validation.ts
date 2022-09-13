@@ -8,4 +8,8 @@ const create = Joi.object({
     userId: Joi.string().required()
 })
 
-export default { create }
+const deleteSoundkit = Joi.object({
+    userId: Joi.string().required()
+})
+
+export default { create, deleteSoundkit }
