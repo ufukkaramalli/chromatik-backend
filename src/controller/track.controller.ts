@@ -5,6 +5,7 @@ import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/utils/validation/track.validation';
 import TrackService from '@/service/track.service';
 import authenticated from '@/middleware/authenticated.middleware';
+import roleMiddleware from '@/middleware/role.middleware';
 
 class TrackController implements IController {
     public path = '/track';
@@ -13,21 +14,31 @@ class TrackController implements IController {
 
     constructor(){
         this.initialiseRoutes()
-        
-        /**
-         * Authentication Guard
-         */
-        this.router.use(authenticated)
     }
 
     private initialiseRoutes(): void {
+
+        /** Track Create Route */
         this.router.post(
             `${this.path}`,
-            validationMiddleware(validate.create),
+            [
+                /**
+                * Authentication Guard
+                */
+                authenticated,
+                roleMiddleware,
+                validationMiddleware(validate.create)
+            ],
             this.create
         )
     }
-
+    /**
+     * 
+     * 
+     * Create Track Handler
+     * 
+     * 
+     */
     private create = async (
         req:Request,
         res:Response,
